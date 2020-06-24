@@ -71,20 +71,30 @@ def traverse_led_b(sec):
         GPIO.output(i, 0)
 
 
+# **** GAME ****
+# Start game: True= Blue start, False= Red start
+def start_game(blue_start):
+    init_speed = .25
+    HOLD = .5
+    score = False
+    # Flash lights to indicate start
+    for i in range(4):
+        all_leds_flash(speed, True)
+    # Hold first led for HOLD seconds, then start
+    led_flash(leds[:1], HOLD, False)
+    while not score:
+        traverse_led_f(speed)
+        traverse_led_b(speed)
+        #time.sleep(1)
+    
+    
 # **** Main ****
-# Detect input event
+# Detect input events
 GPIO.add_event_detect(16, GPIO.FALLING, callback=all_led_on, bouncetime=300)
 GPIO.add_event_detect(26, GPIO.FALLING, callback=all_led_off, bouncetime=300)
 
-# Start game
-speed = .25
-hold = .5
-for i in range(4):
-    all_leds_flash(speed, True)
-
-led_flash(leds[:1], hold, False)
+# Start game, Red always starts on first match
+blue_start = False
 while True:
-    traverse_led_f(speed)
-    traverse_led_b(speed)
-    #time.sleep(1)
-
+    start_game(blue_start)
+    
