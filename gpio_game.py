@@ -72,29 +72,42 @@ def traverse_led_b(sec):
 
 
 # **** GAME ****
-# Start game: True= Blue start, False= Red start
-def start_game(blue_start):
-    init_speed = .25
-    HOLD = .5
+# Start game for red
+def start_red():
+    speed = INIT_SPEED
     score = False
-    # Flash lights to indicate start
+    # Flash before start
     for i in range(4):
         all_leds_flash(speed, True)
-    # Hold first led for HOLD seconds, then start
+    # Hold red LED, then start
     led_flash(leds[:1], HOLD, False)
     while not score:
         traverse_led_f(speed)
         traverse_led_b(speed)
-        #time.sleep(1)
-    
-    
+
+# Start game for blue
+def start_blue():
+    speed = INIT_SPEED
+    score = False
+    # Flash before start
+    for i in range(4):
+        all_leds_flash(speed, True)
+    # Hold red LED, then start
+    led_flash(leds[-1], HOLD, False)
+    while not score:
+        traverse_led_b(speed)
+        traverse_led_f(speed)
+
+
 # **** Main ****
 # Detect input events
 GPIO.add_event_detect(16, GPIO.FALLING, callback=all_led_on, bouncetime=300)
 GPIO.add_event_detect(26, GPIO.FALLING, callback=all_led_off, bouncetime=300)
 
+
+INIT_SPEED = .2
+HOLD = .5
 # Start game, Red always starts on first match
-blue_start = False
 while True:
-    start_game(blue_start)
+    start_blue()
     
